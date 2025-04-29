@@ -27,6 +27,7 @@
         'views/incident_views.xml',
         'views/equipment_views.xml',
         'views/templates.xml',
+        'data/cron.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
