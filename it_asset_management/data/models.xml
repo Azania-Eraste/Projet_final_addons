@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="model_it_equipment" model="ir.model">
+        <field name="name">Équipement_informatique</field>
+        <field name="model">it.equipment</field>
+        
+    </record>
+    <record id="model_it_equipment_type" model="ir.model">
+        <field name="name">Type_d_Équipement_informatique</field>
+        <field name="model">it.equipment.type</field>
+        
+    </record>
+    <record id="model_it_contract" model="ir.model">
+        <field name="name">Contrat_informatique</field>
+        <field name="model">it.contract</field>
+        
+    </record>
+    <record id="model_it_incident" model="ir.model">
+        <field name="name">Incident_informatique</field>
+        <field name="model">it.incident</field>
+        
+    </record>
+</odoo>

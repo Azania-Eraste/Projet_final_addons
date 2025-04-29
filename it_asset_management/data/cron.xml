@@ -7,7 +7,6 @@
         <field name="code">model.check_warranty_alerts()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
-        <field name="numbercall">-1</field>
     </record>
 
     <record id="cron_generate_invoices" model="ir.cron">
@@ -17,6 +16,5 @@
         <field name="code">model.generate_recurring_invoices()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
-        <field name="numbercall">-1</field>
     </record>
 </odoo>

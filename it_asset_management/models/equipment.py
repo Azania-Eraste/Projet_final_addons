@@ -6,7 +6,7 @@ class ITEquipment(models.Model):
     _description = 'Équipement informatique'
 
     name = fields.Char(string="Nom", required=True)
-    type_id = fields.Many2one("it.equipment.type", string="Type", help="Définir le type d'équipement", ondelete='set null', required=True)
+    type_id = fields.Many2one("it.equipment.type", string="Type", help="Définir le type d'équipement", ondelete='cascade', required=True)
     serial_number = fields.Char(string="Numéro de série")
     brand = fields.Char(string="Marque")
     model = fields.Char(string="Modèle")

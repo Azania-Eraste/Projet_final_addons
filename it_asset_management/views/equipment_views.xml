@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="equipment_type"/>
+                <field name="type_id"/>
                 <field name="serial_number"/>
                 <field name="brand"/>
                 <field name="client_id"/>
@@ -23,7 +23,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="equipment_type"/>
+                        <field name="type_id"/>
                         <field name="serial_number"/>
                         <field name="brand"/>
                         <field name="model"/>

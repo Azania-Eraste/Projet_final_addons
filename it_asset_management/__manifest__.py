@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "it_asset_management",
+    'name': "Gestionnaire de parc informatique",
 
     'summary': 'Module pour gérer le parc informatique et la facturation récurrente',
     'description': """
@@ -18,15 +18,16 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','sale_management', 'helpdesk', 'stock', 'account', 'hr'],
+    'depends': ['base', 'sale_management', 'helpdesk', 'stock', 'account', 'hr', 'mail'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'views/contract_views.xml',
-        'views/incident_views.xml',
+        'views/incident_view.xml',
         'views/equipment_views.xml',
         'views/templates.xml',
+        'views/menu_views.xml',
         'data/cron.xml',
     ],
     # only loaded in demonstration mode
@@ -36,5 +37,6 @@
 
     'installable': True,
     'application': True,
+
 }
 

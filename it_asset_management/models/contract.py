@@ -10,10 +10,11 @@ class ITContract(models.Model):
     start_date = fields.Date(string="Date de début", default=fields.Date.today)
     end_date = fields.Date(string="Date de fin")
     billing_frequency = fields.Selection([
-        ('mensuel', 'Mensuel'),
-        ('trimestriel', 'Trimestriel'),
-        ('annuel', 'Annuel')
+        ('monthly', 'Mensuel'),
+        ('quarterly', 'Trimestriel'),
+        ('yearly', 'Annuel')
     ], string="Fréquence de facturation", default='monthly')
+    amount = fields.Float(string="Montant", required=True)  # Ajouté
     equipment_ids = fields.Many2many('it.equipment', string="Équipements couverts")
     invoice_ids = fields.One2many('account.move', 'contract_id', string="Factures")
     state = fields.Selection([
@@ -47,4 +48,4 @@ class ITContract(models.Model):
                 'price_unit': contract.amount
             })]
         }
-        self.env['account.move'].create(invoice_vals)   
+        self.env['account.move'].create(invoice_vals)

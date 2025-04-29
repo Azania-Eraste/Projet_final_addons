@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_it_asset_management_it_asset_management,it_asset_management.it_asset_management,model_it_asset_management_it_asset_management,base.group_user,1,1,1,1
 access_it_equipment,it.equipment,model_it_equipment,base.group_user,1,1,1,1
+access_it_equipment_type,it.equipment.type,model_it_equipment_type,base.group_user,1,1,1,1
 access_it_contract,it.contract,model_it_contract,base.group_user,1,1,1,1
 access_it_incident,it.incident,model_it_incident,base.group_user,1,1,1,1
