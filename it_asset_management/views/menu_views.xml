@@ -3,5 +3,7 @@
         <menuitem name="Gestion de parc informatique" id="it_asset_menu_root" web_icon="it_asset_management,static/description/it_management.png"/>
         <menuitem id="menu_it_equipment" name="Équipements" parent="it_asset_menu_root" action="action_it_equipment" sequence="10"/>
         <menuitem id="menu_it_contract" name="Contrats" parent="it_asset_menu_root" action="action_it_contract" sequence="20"/>
+        <menuitem id="menu_it_maintenance" name="Maintenances" parent="it_asset_menu_root" action="action_it_maintenance" sequence="30"/>
+        <menuitem id="menu_it_intervention" name="Interventions" parent="it_asset_menu_root" action="it_intervention_action" sequence="40"/>
     </data>
 </odoo>

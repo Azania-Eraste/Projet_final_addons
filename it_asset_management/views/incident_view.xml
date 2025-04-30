@@ -6,13 +6,37 @@
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
-                <field name="equipment_id"/>
-                <field name="client_id"/>
-                <field name="site_id"/>
-                <field name="technician_id"/>
+                <sheet>
+                    <group>
+                        <field name="equipment_id"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="client_id"/>
+                        <field name="site_id"/>
+                        <field name="technician_id"/>
+                    </group>
+                </sheet>
             </field>
         </field>
     </record>
 
-    
+    <record id="view_it_contract_list" model="ir.ui.view">
+        <field name="name">it.incident.list</field>
+        <field name="model">it.incident</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="equipment_id"/>
+                <field name="client_id"/>
+                <field name="site_id"/>
+                <field name="technician_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_it_incident" model="ir.actions.act_window">
+        <field name="name">Incident</field>
+        <field name="res_model">it.incident</field>
+        <field name="view_mode">list,form</field>
+    </record>
 </odoo>

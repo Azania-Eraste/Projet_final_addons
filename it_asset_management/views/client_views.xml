@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_it_asset" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <page name="internal_notes" position="before">
+                <page string="Équipements">
+                    <field name="equipment_ids">
+                        <list editable="bottom" readonly="True">
+                            <field name="name"/>
+                            <field name="type_id"/>
+                            <field name="serial_number"/>
+                            <field name="brand"/>
+                            <field name="model"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </page>
+            <field name="category_id" position="after">
+                <field name="est_un_client" widget="boolean_toggle" invisible="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>

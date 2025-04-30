@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+    <!-- Vue liste -->
+    <record id="view_it_maintenance_list" model="ir.ui.view">
+        <field name="name">it.maintenance.list</field>
+        <field name="model">it.maintenance</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire -->
+    <record id="view_it_maintenance_form" model="ir.ui.view">
+        <field name="name">it.maintenance.form</field>
+        <field name="model">it.maintenance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="equipment_id"/>
+                            <field name="description"/>
+                        </group>
+                        <group>
+                            <field name="client_id"/>
+                            <field name="site_id"/>
+                            <field name="technician_id"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                </sheet>   
+                
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir la vue -->
+    <record id="action_it_maintenance" model="ir.actions.act_window">
+        <field name="name">Maintenances</field>
+        <field name="res_model">it.maintenance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
