@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_it_parc_informatique_list" model="ir.ui.view">
+        <field name="name">it.parc.informatique.list</field>
+        <field name="model">it.parc.informatique</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="equipment_ids"/>
+                <field name="client_id"/> 
+            </list>
+        </field>
+    </record>
+
+    <record id="view_it_parc_informatique_form" model="ir.ui.view">
+        <field name="name">it.parc.informatique.form</field>
+        <field name="model">it.parc.informatique</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Information de base">
+                            <field name="name"/>
+                            <field name="client_id"/>  
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="equipments" string="Équipements">
+                            <button name="%(action_it_equipment_kanban)d"
+                                    type="action"
+                                    string="Gérer les équipements (Kanban)"
+                                    class="btn-primary"/>
+                            <field name="equipment_ids">
+                                <kanban default_group_by="state">
+                                    <field name="name"/>
+                                    <field name="type_id"/>
+                                    <field name="site_id"/>
+                                    <field name="user_id"/>
+                                    <field name="state"/>
+                                    <field name="alert_triggered"/>
+                                    <control>
+                                        <create string="Ajouter un équipement"/>
+                                    </control>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click">
+                                                <div class="oe_kanban_card">
+                                                    <div class="oe_kanban_details">
+                                                        <strong><field name="name"/></strong>
+                                                        <div>Type: <field name="type_id"/></div>
+                                                        <div>Site: <field name="site_id"/></div>
+                                                        <div>Utilisateur: <field name="user_id"/></div>
+                                                        <div>État: <field name="state"/></div>
+                                                        <div>
+                                                            Alerte: 
+                                                            <field name="alert_triggered" widget="boolean_toggle"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_it_parc_informatique" model="ir.actions.act_window">
+        <field name="name">Parc informatique</field>
+        <field name="res_model">it.parc.informatique</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

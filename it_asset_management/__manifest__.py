@@ -30,6 +30,7 @@
         'views/maintenance_views.xml',
         'views/client_views.xml',
         'views/intervention_views.xml',
+        'views/parc_views.xml',
         'views/menu_views.xml',
         'data/cron.xml',
     ],

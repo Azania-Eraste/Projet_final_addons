@@ -11,11 +11,13 @@ class ITEquipment(models.Model):
     brand = fields.Char(string="Marque")
     model = fields.Char(string="Modèle")
     image = fields.Binary('Image')
+    parc_id = fields.Many2one('it.parc.informatique', string="Parc Informatique", required=True)
+    client_id = fields.Many2one('res.partner', string="Client", related='parc_id.client_id')
     warranty_end_date = fields.Date(string="Fin de garantie")
-    client_id = fields.Many2one('res.partner', string="Client", domain=[('est_un_client', '=', True)])
     site_id = fields.Many2one('res.partner', string="Site", domain="[('parent_id', '=', client_id)]")
     user_id = fields.Many2one('res.users', string="Utilisateur assigné")
     state = fields.Selection([
+        ('draft', 'Brouillon'),
         ('active', 'Actif'),
         ('maintenance', 'En maintenance'),
         ('retired', 'Retiré')
