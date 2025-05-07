@@ -1,43 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Form View -->
     <record id="view_it_incident_form" model="ir.ui.view">
         <field name="name">it.incident.form</field>
         <field name="model">it.incident</field>
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
+            <!-- Add fields after partner_id -->
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="equipment_id" domain="[('client_id', '=', partner_id)]"/>
-                <field name="client_id" readonly="1"/>
-                <field name="site_id" readonly="1"/>
-                <field name="technician_id"/>
+                <field name="equipment_id" domain="[('client_id', '=', partner_id)]" context="{'default_client_id': partner_id}"/>
+                <field name="client_id" readonly="1" string="Client"/>
+                <field name="site_id" readonly="1" string="Site"/>
+                <field name="technician_id" invisible="stage_id.fold == True"/>
             </xpath>
+            <!-- Add SLA and computed fields in a group -->
             <xpath expr="//sheet/group[1]" position="inside">
                 <group string="Détails de l'incident">
                     <field name="sla_ids" widget="many2many_tags"/>
+                    <field name="partner_open_ticket_count" string="Open Tickets"/>
+                    <field name="partner_ticket_count" string="Total Tickets"/>
                 </group>
+            </xpath>
+            <!-- Move stage_id to a prominent position -->
+            <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="options">{'fold_field': 'fold'}</attribute>
+            </xpath>
+            <!-- Add description field below the title -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="description" placeholder="Describe the issue..."/>
             </xpath>
         </field>
     </record>
 
-    <record id="view_it_incident_list" model="ir.ui.view">
-        <field name="name">it.incident.list</field>
+    <!-- Kanban View -->
+    <record id="view_it_incident_kanban" model="ir.ui.view">
+        <field name="name">it.incident.kanban</field>
         <field name="model">it.incident</field>
         <field name="arch" type="xml">
-            <list>
-                <field name="name" string="Titre"/>
+            <kanban default_group_by="stage_id" group_create="false">
+                <field name="name"/>
                 <field name="equipment_id"/>
                 <field name="client_id"/>
                 <field name="site_id"/>
                 <field name="stage_id"/>
                 <field name="technician_id"/>
+                <field name="priority"/>
+                <field name="partner_open_ticket_count"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong><field name="name"/></strong>
+                                <div><field name="equipment_id"/></div>
+                                <div><field name="client_id"/></div>
+                                <div><field name="site_id"/></div>
+                                <div>
+                                    <field name="stage_id" widget="label_selection" options="{'fold_field': 'fold'}"/>
+                                </div>
+                                <div><field name="technician_id"/></div>
+                                <div>
+                                    <field name="priority" widget="priority"/>
+                                    <span t-if="record.partner_open_ticket_count.raw_value > 0">
+                                        (<field name="partner_open_ticket_count"/> open)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_it_incident_list" model="ir.ui.view">
+        <field name="name">it.incident.list</field>
+        <field name="model">it.incident</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="stage_id.fold == True" decoration-danger="priority == '3'">
+                <field name="name" string="Incident Title"/>
+                <field name="equipment_id" string="Equipment"/>
+                <field name="client_id" string="Client"/>
+                <field name="site_id" string="Site"/>
+                <field name="stage_id" string="Stage"/>
+                <field name="technician_id" string="Technician"/>
+                <field name="priority" widget="priority" string="Priority"/>
+                <field name="partner_open_ticket_count" string="Open Tickets"/>
+                <field name="create_date" string="Created On"/>
             </list>
         </field>
     </record>
 
+    <!-- Action -->
     <record id="action_it_incident" model="ir.actions.act_window">
         <field name="name">Incidents</field>
         <field name="res_model">it.incident</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="view_id" ref="view_it_incident_list"/>
+        <field name="view_id" ref="view_it_incident_kanban"/>
+        <field name="domain">[('active', '=', True)]</field>
+        <field name="context">{
+            'search_default_stage_id': [('sequence', '=', 1)],
+            'group_by': 'stage_id'
+        }</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new IT incident.
+            </p>
+            <p>
+                Manage IT incidents related to equipment, assign technicians, and track SLAs.
+            </p>
+        </field>
     </record>
 </odoo>
