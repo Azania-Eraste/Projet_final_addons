@@ -1,94 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_it_equipment_list" model="ir.ui.view">
-        <field name="name">it.equipment.list</field>
-        <field name="model">it.equipment</field>
-        <field name="arch" type="xml">
-            <list>
-                <field name="name"/>
-                <field name="type_id"/>
-                <field name="serial_number"/>
-                <field name="brand"/>
-                <field name="state"/>
-            </list>
-        </field>
-    </record>
+    <data>
+        <record id="view_it_equipment_list" model="ir.ui.view">
+            <field name="name">it.equipment.list</field>
+            <field name="model">it.equipment</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="type_id"/>
+                    <field name="serial_number"/>
+                    <field name="brand"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
 
-    <record id="view_it_equipment_kanban" model="ir.ui.view">
-        <field name="name">it.equipment.kanban</field>
-        <field name="model">it.equipment</field>
-        <field name="arch" type="xml">
-            <kanban default_group_by="state">
-                <field name="name"/>
-                <field name="type_id"/>
-                <field name="site_id"/>
-                <field name="user_id"/>
-                <field name="state"/>
-                <field name="alert_triggered"/>
-                <field name="parc_id"/>
-                <control>
-                    <create string="Ajouter un équipement"/>
-                </control>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click">
-                            <div class="oe_kanban_card">
-                                <div class="oe_kanban_details">
-                                    <strong><field name="name"/></strong>
-                                    <div>Type: <field name="type_id"/></div>
-                                    <div>Site: <field name="site_id"/></div>
-                                    <div>Utilisateur: <field name="user_id"/></div>
-                                    <div>État: <field name="state"/></div>
-                                    <div>
-                                        Alerte: 
-                                        <field name="alert_triggered" widget="boolean_toggle"/>
+        <record id="view_it_equipment_kanban" model="ir.ui.view">
+            <field name="name">it.equipment.kanban</field>
+            <field name="model">it.equipment</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="name"/>
+                    <field name="type_id"/>
+                    <field name="site_id"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                    <field name="alert_triggered"/>
+                    <field name="parc_id"/>
+                    <control>
+                        <create string="Ajouter un équipement"/>
+                    </control>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="oe_kanban_card">
+                                    <div class="oe_kanban_details">
+                                        <strong><field name="name"/></strong>
+                                        <div>Type: <field name="type_id"/></div>
+                                        <div>Site: <field name="site_id"/></div>
+                                        <div>Utilisateur: <field name="user_id"/></div>
+                                        <div>État: <field name="state"/></div>
+                                        <div>
+                                            Alerte: 
+                                            <field name="alert_triggered" widget="boolean_toggle"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
 
-    <record id="view_it_equipment_form" model="ir.ui.view">
-        <field name="name">it.equipment.form</field>
-        <field name="model">it.equipment</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <group>
-                        <group string="Information de base">
-                            <field name="name"/>
-                            <field name="type_id"/>
-                            <field name="state"/>  
-                        </group>
+        <record id="view_it_equipment_form" model="ir.ui.view">
+            <field name="name">it.equipment.form</field>
+            <field name="model">it.equipment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
                         <group>
-                            <field name="image" widget="image" class="oe_avatar"/>
+                            <group string="Information de base">
+                                <field name="name"/>
+                                <field name="type_id"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+                                <field name="image" widget="image" class="oe_avatar"/>
+                            </group>
+                            <group string="Information de l'équipement">
+                                <field name="brand"/>
+                                <field name="model"/>
+                                <field name="serial_number"/>
+                                <field name="warranty_end_date"/>
+                            </group>
+                            <group string="Emplacement">
+                                <field name="site_id"/>
+                                <field name="user_id"/>
+                                <field name="parc_id"/>
+                            </group>
                         </group>
-                        <group string="Information de l'équipement">
-                            <field name="brand"/>   
-                            <field name="model"/>  
-                            <field name="serial_number"/>        
-                            <field name="warranty_end_date"/>              
-                        </group>
-                        <group string="Emplacement">
-                            <field name="site_id"/>
-                            <field name="user_id"/>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
-    <record id="action_it_equipment" model="ir.actions.act_window">
-        <field name="name">Équipements du Parc</field>
-        <field name="res_model">it.equipment</field>
-        <field name="view_mode">kanban,list,form</field>
-        <field name="view_id" ref="view_it_equipment_kanban"/>
-        <field name="domain">[('parc_id', '=', active_id)]</field>
-        <field name="context">{'default_parc_id': active_id}</field>
-    </record>
+        <!-- Action pour afficher les équipements d'un parc spécifique, appelée depuis le formulaire it.parc.informatique -->
+        <record id="action_it_equipment_kanban" model="ir.actions.act_window">
+            <field name="name">Équipements du Parc</field>
+            <field name="res_model">it.equipment</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="view_id" ref="view_it_equipment_kanban"/>
+            <field name="domain">[('parc_id', '=', active_id)]</field>
+            <field name="context">{'default_parc_id': active_id}</field>
+        </record>
+
+        <!-- Action pour afficher tous les équipements, utilisée dans les menus -->
+        <record id="action_it_equipment" model="ir.actions.act_window">
+            <field name="name">Tous les Équipements</field>
+            <field name="res_model">it.equipment</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="view_id" ref="view_it_equipment_list"/>
+        </record>
+    </data>
 </odoo>

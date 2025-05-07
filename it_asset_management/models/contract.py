@@ -6,7 +6,7 @@ class ITContract(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string="Nom du contrat", required=True)
-    client_id = fields.Many2one('res.partner', string="Client", required=True)
+    client_id = fields.Many2one('res.partner', string="Client", required=True, domain=[('est_un_client', '=', True)])
     start_date = fields.Date(string="Date de début", default=fields.Date.today)
     end_date = fields.Date(string="Date de fin")
     billing_frequency = fields.Selection([

@@ -21,7 +21,7 @@
         </field>
     </record>
 
-    <record id="view_it_contract_list" model="ir.ui.view">
+    <record id="view_it_incident_list" model="ir.ui.view">
         <field name="name">it.incident.list</field>
         <field name="model">it.incident</field>
         <field name="arch" type="xml">

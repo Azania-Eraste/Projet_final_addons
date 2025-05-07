@@ -12,7 +12,7 @@ class ITEquipment(models.Model):
     model = fields.Char(string="Modèle")
     image = fields.Binary('Image')
     parc_id = fields.Many2one('it.parc.informatique', string="Parc Informatique", required=True)
-    client_id = fields.Many2one('res.partner', string="Client", related='parc_id.client_id')
+    client_id = fields.Many2one('res.partner', string="Client", related='parc_id.client_id', domain=[('est_un_client', '=', True)])
     warranty_end_date = fields.Date(string="Fin de garantie")
     site_id = fields.Many2one('res.partner', string="Site", domain="[('parent_id', '=', client_id)]")
     user_id = fields.Many2one('res.users', string="Utilisateur assigné")
@@ -44,3 +44,5 @@ class ITEquipment(models.Model):
                 'user_id': equipment.client_id.user_id.id or self.env.user.id
             })
             equipment.alert_triggered = True
+
+    

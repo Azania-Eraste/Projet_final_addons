@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
         <menuitem name="Gestion de parc informatique" id="it_asset_menu_root" web_icon="it_asset_management,static/description/it_management.png"/>

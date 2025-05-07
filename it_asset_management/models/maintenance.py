@@ -17,7 +17,7 @@ class Maintenance(models.Model):
         ('cancelled', 'Annulée')
     ], string="État", default='planned', tracking=True)
     description = fields.Text(string="Description")
-    client_id = fields.Many2one('res.partner', string="Client", related='parc_id.client_id')
+    client_id = fields.Many2one('res.partner', string="Client", related='parc_id.client_id', domain=[('est_un_client', '=', True)])
     site_id = fields.Many2one('res.partner', string="Site")  # Non related, à remplir via onchange
     technician_id = fields.Many2one('hr.employee', string="Technicien assigné", tracking=True)
     equipment_ids = fields.Many2many('it.equipment', string="Équipements", domain="[('parc_id', '=', parc_id)]")
