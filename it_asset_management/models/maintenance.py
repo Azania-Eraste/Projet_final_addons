@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import date
 
 class Maintenance(models.Model):
     _name = 'it.maintenance'
@@ -34,3 +35,16 @@ class Maintenance(models.Model):
             self.name = f"Maintenance {self.parc_id.name} - {fields.Date.today().strftime('%Y%m%d')}"
             if self.parc_id.equipment_ids:
                 self.site_id = self.parc_id.equipment_ids[0].site_id
+
+    @api.model
+    def update_maintenance_state(self):
+        """Update state to 'in_progress' for maintenance records where start_date is today and state is 'planned'."""
+        today = date.today()
+        maintenance_records = self.search([
+            ('start_date', '=', today),
+            ('state', '=', 'planned')
+        ])
+        for record in maintenance_records:
+            record.state = 'in_progress'
+            # Optional: Add a message to the chatter for tracking
+            record.message_post(body=f"Maintenance automatically set to 'In Progress' on {today}.")
