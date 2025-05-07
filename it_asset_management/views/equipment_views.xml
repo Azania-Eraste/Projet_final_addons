@@ -10,7 +10,11 @@
                     <field name="type_id"/>
                     <field name="serial_number"/>
                     <field name="brand"/>
-                    <field name="state"/>
+                    <field name="state" widget="badge"
+                           decoration-info="state == 'draft'"
+                           decoration-success="state == 'active'"
+                           decoration-danger="state == 'retired'"
+                           decoration-warning="state == 'maintenance'"/>
                 </list>
             </field>
         </record>

@@ -7,5 +7,6 @@
         <menuitem id="menu_it_contract" name="Contrats" parent="it_asset_menu_root" action="action_it_contract" sequence="30"/>
         <menuitem id="menu_it_maintenance" name="Maintenances" parent="it_asset_menu_root" action="action_it_maintenance" sequence="40"/>
         <menuitem id="menu_it_intervention" name="Interventions" parent="it_asset_menu_root" action="it_intervention_action" sequence="50"/>
+        <menuitem id="menu_it_incidents" name="Incidents" parent="it_asset_menu_root" action="action_it_incident" sequence="60"/>
     </data>
 </odoo>
