@@ -6,5 +6,4 @@ access_it_incident,it.incident,model_it_incident,base.group_user,1,1,1,1
 access_it_intervention,it.intervention,model_it_intervention,base.group_user,1,1,1,1
 access_it_maintenance,it.maintenance,model_it_maintenance,base.group_user,1,1,1,1
 access_it_parc_informatique,it.parc.informatique,model_it_parc_informatique,,1,1,1,1
-access_it_parc_informatique_portal,it_parc_informatique_portal,model_it_parc_informatique,base.group_portal,1,0,0,0
-access_it_equipment_portal,it_equipment_portal,model_it_equipment,base.group_portal,1,0,0,0
+access_it_equipment_portal,it.equipment.portal,model_it_equipment,base.group_portal,1,0,0,0
