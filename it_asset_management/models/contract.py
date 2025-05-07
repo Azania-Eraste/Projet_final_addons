@@ -1,4 +1,7 @@
 from odoo import models, fields, api
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ITContract(models.Model):
     _name = 'it.contract'
@@ -14,14 +17,31 @@ class ITContract(models.Model):
         ('quarterly', 'Trimestriel'),
         ('yearly', 'Annuel')
     ], string="Fréquence de facturation", default='monthly')
-    amount = fields.Float(string="Montant", required=True)  # Ajouté
-    equipment_ids = fields.Many2many('it.equipment', string="Équipements couverts")
+    amount = fields.Float(string="Montant", required=True)
+    parc_id = fields.Many2one('it.parc.informatique', string="Parc Informatique", tracking=True)
+    equipment_ids = fields.One2many('it.equipment', string="Équipements", related='parc_id.equipment_ids', readonly=False)
     invoice_ids = fields.One2many('account.move', 'contract_id', string="Factures")
     state = fields.Selection([
         ('draft', 'Brouillon'),
         ('active', 'Actif'),
         ('expired', 'Expiré')
     ], string="État", default='draft')
+    ticket_answer_time = fields.Selection([
+        ('1h', '1 heure'),
+        ('4h', '4 heures'),
+        ('8h', '8 heures'),
+        ('1d', '1 jour'),
+        ('2d', '2 jours'),
+        ('1w', '1 semaine')
+    ], string="Délai de réponse", required=True, default='4h')
+
+    @api.depends('parc_id')
+    def _check_parc_id(self):
+        for record in self:
+            if not record.parc_id:
+                _logger.info("parc_id is unset for contract %s", record.name)
+            elif not record.parc_id.equipment_ids:
+                _logger.info("equipment_ids is empty for parc %s", record.parc_id.name)
 
     @api.model
     def generate_recurring_invoices(self):

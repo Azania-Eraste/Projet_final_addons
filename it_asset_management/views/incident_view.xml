@@ -5,19 +5,17 @@
         <field name="model">it.incident</field>
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
-            <field name="partner_id" position="after">
-                <sheet>
-                    <group>
-                        <field name="equipment_id"/>
-                        <field name="description"/>
-                    </group>
-                    <group>
-                        <field name="client_id"/>
-                        <field name="site_id"/>
-                        <field name="technician_id"/>
-                    </group>
-                </sheet>
-            </field>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="equipment_id" domain="[('client_id', '=', partner_id)]"/>
+                <field name="client_id" readonly="1"/>
+                <field name="site_id" readonly="1"/>
+                <field name="technician_id"/>
+            </xpath>
+            <xpath expr="//sheet/group[1]" position="inside">
+                <group string="Détails de l'incident">
+                    <field name="sla_ids" widget="many2many_tags"/>
+                </group>
+            </xpath>
         </field>
     </record>
 
@@ -26,17 +24,20 @@
         <field name="model">it.incident</field>
         <field name="arch" type="xml">
             <list>
+                <field name="name" string="Titre"/>
                 <field name="equipment_id"/>
                 <field name="client_id"/>
                 <field name="site_id"/>
+                <field name="stage_id"/>
                 <field name="technician_id"/>
             </list>
         </field>
     </record>
 
     <record id="action_it_incident" model="ir.actions.act_window">
-        <field name="name">Incident</field>
+        <field name="name">Incidents</field>
         <field name="res_model">it.incident</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="view_it_incident_list"/>
     </record>
 </odoo>

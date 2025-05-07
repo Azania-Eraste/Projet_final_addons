@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Intégration du module dans le portail -->
+    <template id="it_asset_portal_my_home" inherit_id="portal.portal_my_home" name="IT Asset Portal Items">
+        <div id="portal_my_home" position="inside">
+            <div class="row">
+                <div class="col-lg-4">
+                    <a href="/my/assets" class="card mb-4">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <h5 class="card-title">IT Assets</h5>
+                                    <p class="card-text">Manage your IT assets</p>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-laptop fa-2x text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <!-- Ajout d'un élément dans le menu du portail -->
+    <template id="portal_breadcrumbs" inherit_id="portal.portal_breadcrumbs" name="Portal Breadcrumbs">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'assets'" class="breadcrumb-item">IT Assets</li>
+        </xpath>
+    </template>
+    
+    <!-- Page principale pour les assets -->
+    <template id="portal_my_assets" name="My Assets">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'assets'"/>
+            
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>My IT Assets</h3>
+                        
+                        <!-- Filtres et recherche -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <form class="o_portal_search_panel">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-search"/>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" name="search" 
+                                               t-att-value="search if search else ''" 
+                                               placeholder="Search in Assets..."/>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Liste des assets -->
+                        <div class="o_portal_assets">
+                            <div t-if="not assets" class="alert alert-info">
+                                <p>No IT assets found.</p>
+                            </div>
+                            
+                            <div t-if="assets" class="table-responsive">
+                                <table class="table table-hover o_portal_my_doc_table">
+                                    <thead>
+                                        <tr class="active">
+                                            <th>Asset Name</th>
+                                            <th>Asset Type</th>
+                                            <th>Serial Number</th>
+                                            <th>Status</th>
+                                            <th>Assigned Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="assets" t-as="asset">
+                                            <tr>
+                                                <td>
+                                                    <a t-attf-href="/my/assets/#{asset.id}">
+                                                        <span t-field="asset.name"/>
+                                                    </a>
+                                                </td>
+                                                <td><span t-field="asset.asset_type_id.name"/></td>
+                                                <td><span t-field="asset.serial_number"/></td>
+                                                <td><span t-field="asset.state"/></td>
+                                                <td><span t-field="asset.assigned_date"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <t t-call="portal.pager"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <!-- Template pour la vue détaillée d'un asset -->
+    <template id="portal_my_asset" name="My Asset">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'assets'"/>
+            
+            <div class="container mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>
+                                    <span t-field="asset.name"/> - <small t-field="asset.asset_type_id.name"/>
+                                </h4>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span t-field="asset.state" class="badge badge-pill badge-primary"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-6">
+                                <strong>Serial Number:</strong> <span t-field="asset.serial_number"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Model:</strong> <span t-field="asset.model"/>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-6">
+                                <strong>Purchase Date:</strong> <span t-field="asset.purchase_date"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Assigned Date:</strong> <span t-field="asset.assigned_date"/>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <strong>Notes:</strong>
+                                <p t-field="asset.notes"/>
+                            </div>
+                        </div>
+                        
+                        <!-- Section pour les demandes d'assistance -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5>Assistance Requests</h5>
+                                <div t-if="not asset.support_request_ids" class="alert alert-info">
+                                    <p>No assistance requests for this asset.</p>
+                                </div>
+                                <div t-if="asset.support_request_ids" class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Request Date</th>
+                                                <th>Issue</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="asset.support_request_ids" t-as="request">
+                                                <tr>
+                                                    <td><span t-field="request.create_date"/></td>
+                                                    <td><span t-field="request.name"/></td>
+                                                    <td><span t-field="request.state"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bouton pour créer une demande d'assistance -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <a t-attf-href="/my/assets/#{asset.id}/request" class="btn btn-primary">
+                                    <i class="fa fa-plus-circle"/> New Assistance Request
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <!-- Template pour créer une demande d'assistance -->
+    <template id="portal_create_asset_request" name="Create Assistance Request">
+        <t t-call="portal.portal_layout">
+            <t t-set="page_name" t-value="'assets'"/>
+            
+            <div class="container mt-4">
+                <h3>New Assistance Request</h3>
+                <h5>Asset: <span t-field="asset.name"/></h5>
+                
+                <form action="/my/assets/request/submit" method="post" class="mt-4" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="asset_id" t-att-value="asset.id"/>
+                    
+                    <div class="form-group">
+                        <label for="issue_title">Issue Title</label>
+                        <input type="text" class="form-control" name="issue_title" id="issue_title" required="required"/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" name="description" id="description" rows="5" required="required"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select class="form-control" name="priority" id="priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected="selected">Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attachment">Attachment</label>
+                        <input type="file" class="form-control-file" name="attachment" id="attachment"/>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                        <a t-attf-href="/my/assets/#{asset.id}" class="btn btn-secondary ml-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>

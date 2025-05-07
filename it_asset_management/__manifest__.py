@@ -18,11 +18,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale_management', 'helpdesk', 'stock', 'account', 'hr', 'mail'],
+    'depends': ['base', 'sale_management', 'helpdesk', 'stock', 'account', 'hr', 'mail','portal','web'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'views/asset.xml',
+        'views/portal_templates.xml',
         'views/contract_views.xml',
         'views/incident_view.xml',
         'views/parc_views.xml',
@@ -35,6 +37,14 @@
         'views/menu_views.xml',
         'data/cron.xml',
     ],
+    'py_files': [
+        'controllers/portal.py',
+    ],
+    'assets': {
+        'web.assets_frontend': [
+            '/it_asset_management/static/src/scss/portal.scss',
+        ],
+    },
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',

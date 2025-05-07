@@ -21,17 +21,25 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="client_id"/>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                        <field name="billing_frequency"/>
-                        <field name="amount"/>
-                        <field name="state"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="client_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="billing_frequency"/>
+                            <field name="amount"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="parc_id"/>
+                            <field name="ticket_answer_time"/>
+                        </group>
                     </group>
                     <notebook>
-                        <page string="Équipements">
-                            <field name="equipment_ids" widget="many2many_tags"/>
+                        <page string="Parc">
+                            <field name="parc_id"/>
                         </page>
                         <page string="Factures">
                             <field name="invoice_ids"/>

@@ -1,0 +1,8 @@
+<odoo>
+  <template id="it_asset_management_frontend_assets" inherit_id="web.assets_frontend" name="IT Asset Management Frontend SCSS">
+    <xpath expr="." position="inside">
+      <!-- Chemin vers votre SCSS -->
+      <link rel="stylesheet" type="text/scss" href="/it_asset_management/static/src/scss/portal.scss"/>
+    </xpath>
+  </template>
+</odoo>
