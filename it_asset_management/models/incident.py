@@ -9,6 +9,8 @@ class ITIncident(models.Model):
     _inherit = 'helpdesk.ticket'
     _description = 'Incident informatique'
 
+    name = fields.Char(string="Nom", required=True, help="Nom de l'incident")
+    description = fields.Text(string="Description")
     equipment_id = fields.Many2one('it.equipment', string="Équipement concerné")
     client_id = fields.Many2one(
         'res.partner',
@@ -34,7 +36,6 @@ class ITIncident(models.Model):
             ('fold', '=', False),
             ('is_close', '=', False)
         ], limit=1),
-        group_expand='_read_group_stage_ids',
         tracking=True
     )
     partner_open_ticket_count = fields.Integer(
@@ -78,7 +79,7 @@ class ITIncident(models.Model):
             if partner_id:
                 open_tickets = self.env['it.incident'].search_count([
                     ('partner_id', '=', partner_id.id),
-                    ('stage_id.fold', '=', False),  # Open stages have fold=False
+                    ('stage_id.fold', '=', False),
                     ('id', '!=', ticket.id),
                 ])
                 ticket.partner_open_ticket_count = open_tickets
@@ -112,7 +113,23 @@ class ITIncident(models.Model):
         elif not self.equipment_id:
             self.partner_id = False
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Créer les enregistrements
+        tickets = super(ITIncident, self).create(vals_list)
+        # Appliquer les SLA avec le contexte approprié
+        tickets.with_context(active_model='helpdesk.ticket').sudo()._sla_apply()
+        return tickets
+
     @api.model
-    def _read_group_stage_ids(self, stages, domain, order):
-        """ Ensure all stages are available in the Kanban view """
-        return self.env['helpdesk.stage'].search([]).ids
+    def _sla_find(self):
+        _logger.info("Appel de _sla_find pour les enregistrements : %s, Modèle : %s", self, self._name)
+        
+        # Convertir les enregistrements it.incident en helpdesk.ticket
+        helpdesk_tickets = self.env['helpdesk.ticket'].browse(self.ids) if self else self.env['helpdesk.ticket']
+        
+        # Appeler la méthode parente avec les enregistrements convertis
+        result = super(ITIncident, helpdesk_tickets)._sla_find()
+        
+        _logger.info("Résultat de _sla_find : %s", result)
+        return result

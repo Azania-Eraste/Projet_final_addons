@@ -4,32 +4,64 @@
     <record id="view_it_incident_form" model="ir.ui.view">
         <field name="name">it.incident.form</field>
         <field name="model">it.incident</field>
-        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
-            <!-- Add fields after partner_id -->
-            <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="equipment_id" domain="[('client_id', '=', partner_id)]" context="{'default_client_id': partner_id}"/>
-                <field name="client_id" readonly="1" string="Client"/>
-                <field name="site_id" readonly="1" string="Site"/>
-                <field name="technician_id" invisible="stage_id.fold == True"/>
-            </xpath>
-            <!-- Add SLA and computed fields in a group -->
-            <xpath expr="//sheet/group[1]" position="inside">
-                <group string="Détails de l'incident">
-                    <field name="sla_ids" widget="many2many_tags"/>
-                    <field name="partner_open_ticket_count" string="Open Tickets"/>
-                    <field name="partner_ticket_count" string="Total Tickets"/>
-                </group>
-            </xpath>
-            <!-- Move stage_id to a prominent position -->
-            <xpath expr="//field[@name='stage_id']" position="attributes">
-                <attribute name="widget">statusbar</attribute>
-                <attribute name="options">{'fold_field': 'fold'}</attribute>
-            </xpath>
-            <!-- Add description field below the title -->
-            <xpath expr="//field[@name='name']" position="after">
-                <field name="description" placeholder="Describe the issue..."/>
-            </xpath>
+            <form>
+                <header>
+                    <field name="stage_id" widget="statusbar" clickable="True" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nom de l'incident" required="True" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="equipment_id" 
+                                   options="{'no_create': True, 'no_open': True}" 
+                                   placeholder="Sélectionner un équipement" />
+                            <field name="client_id" 
+                                   options="{'no_create': True, 'no_open': True}" 
+                                   readonly="True" />
+                            <field name="site_id" 
+                                   options="{'no_create': True, 'no_open': True}" 
+                                   readonly="True" />
+                        </group>
+                        <group>
+                            <field name="technician_id" 
+                                   options="{'no_create': True, 'no_open': True}" 
+                                   placeholder="Sélectionner un technicien" />
+                            <field name="partner_open_ticket_count" readonly="True" />
+                            <field name="partner_ticket_count" readonly="True" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Décrivez l'incident..." />
+                        </page>
+                        <page string="SLA">
+                            <field name="sla_ids" widget="many2many_tags" 
+                                   options="{'no_create': True, 'no_open': True}" />
+                        </page>
+                        <page string="Tickets associés">
+                            <field name="partner_ticket_ids" widget="many2many" 
+                                   readonly="True">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="equipment_id" />
+                                    <field name="stage_id" />
+                                    <field name="create_date" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
         </field>
     </record>
 
@@ -106,7 +138,7 @@
         }</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
-                Click to create a new IT incident.
+                Clique ici pour créer un nouvel incident.
             </p>
             <p>
                 Manage IT incidents related to equipment, assign technicians, and track SLAs.
